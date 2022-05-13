@@ -91,4 +91,23 @@ class UserController extends Controller
             'Data Profile User Berhasil Disimpan'
         );
     }
+
+    public function updateProfile(Request $request){
+        $data = $request->all();
+
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'username' => ['required', 'string', 'max:255', 'unique:users'],
+            'phone' => ['required', 'string', 'max:255'],
+            'password' => ['required', 'string', new Password],
+        ]);
+
+        $user = Auth::user();
+        $user -> update($data);
+
+        return ResponseFormatter::success($user, 'Profile Updated');
+
+        
+    }
 }
